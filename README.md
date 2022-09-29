@@ -1,6 +1,8 @@
 # Modular Animation
-Sample code to create animation using modules in javascript
+Contoh script untuk membuat animasi dengan menggunakan modul javascript
 
-# Note 
-Modules only work with the HTTP(s) protocol.
-A web-page opened via the file:// protocol cannot use import / export.
+# Catatan:
+Modul hanya bekerja melalui HTTP(s) protocol.
+File web yang dibuka langsung menggunakan protokol file:// (misalnya dengan dobel klik langsung pada nama file) tidak bisa menggunakan import / export. 
+
+Jadi anda harus menguploadnya pada sebuah web server untuk bisa dijalankan. Tentu saja anda bisa menggunakan server lokal (localhost) untuk mencobanya.
