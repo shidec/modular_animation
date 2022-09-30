@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>SIB Class</title>
+	<style>
+		canvas{
+			background-color: #87CEEB;
+			display: block;
+			margin: 50px auto;
+			border: 1px solid #333;
+		}
+	</style>
+</head>
+<body>
+<div align="center">Contoh script animasi gerak object dengan seluruh script ditulis dalam satu file.</div>
+<canvas width="800" height="600" id="myCanvas"></canvas>
+<script>
+'use strict';
+
+let c = document.getElementById("myCanvas");
+let ctx = c.getContext("2d");
+
+class BidangDatar {
+	constructor(x, y) {
+		this.x = x;
+		this.y = y;
+		
+		//perubahan posisi tiap langkah diisi dengan nilai acak dari 4 s/d -4 
+		this.stepX = 4 - Math.random() * 8;
+		this.stepY = 4 - Math.random() * 8;
+	}
+
+	gerak(){
+		//posisi x dan y berubah sesuai dengan nilai stepX dan stepY
+		this.x += this.stepX;
+		this.y += this.stepY;	
+	}
+}
+
+class Lingkaran extends BidangDatar{
+	constructor(x, y, r, color = '#000000') {
+		super(x, y);
+		this.r = r;
+		this.color = color;
+	}
+
+	gambar(){
+		ctx.strokeStyle = this.color; //warna
+		ctx.lineWidth = 4; //ketebalan garis
+		ctx.beginPath(); //mulai menggambar
+		ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2); //menggambar busur dengan titik pusat di x,y , jari2 = r , dari sudut 0 s/d 360 (satu lingkaran penuh) 
+		ctx.stroke(); //gambarkan
+	}
+
+	gerak(){
+		// gerakan object
+		super.gerak();
+		
+		// jika x menyentuh tepi kanan atau x menyentuh tepi kiri, balikkan stepX
+		if(this.x >= (800 - this.r) || this.x <= this.r) this.stepX = -this.stepX;
+		
+		// jika y menyentuh tepi bawah atau y menyentuh tepi atas, balikkan stepY
+		if(this.y >= (600 - this.r) || this.y <= this.r) this.stepY = -this.stepY;
+	}
+}
+
+class PersegiPanjang extends BidangDatar{
+	constructor(x, y, w, h, color = '#000000') {
+		super(x, y);
+		this.w = w;	
+		this.h = h;
+		this.color = color;
+	}
+
+	gambar(){
+		ctx.strokeStyle = this.color; //warna
+		ctx.lineWidth = 4; //ketebalan garis
+		ctx.beginPath(); //mulai menggambar
+		ctx.rect(this.x - (this.w / 2) , this.y - (this.h / 2), this.w, this.h); //menggambar kotak sehingga titik x, y ada di tengah2 kotak
+		ctx.stroke(); //gambarkan
+	}
+
+	gerak(){
+		super.gerak();
+		
+		// jika x menyentuh tepi kanan atau x menyentuh tepi kiri, balikkan stepX
+		if(this.x >= (800 - (this.w / 2)) || this.x <= (this.w / 2)) this.stepX = -this.stepX;
+		
+		// jika y menyentuh tepi bawah atau y menyentuh tepi atas, balikkan stepY
+		if(this.y >= (600 - (this.h / 2)) || this.y <= (this.h / 2)) this.stepY = -this.stepY;
+	}
+}
+
+// class BujurSangkar diturunkan dari class PersegiPanjang karena bujur sangkar adalah persegi panjang dengan panjang sisi yang sama
+class BujurSangkar extends PersegiPanjang{
+	constructor(x, y, s, color) {
+		super(x, y, s, s, color);
+	}
+}
+
+// buat object berdasarkan class yang sudah ada
+const lingkaran1 = new Lingkaran(200, 200, 40, '#aa0000');
+const persegiPanjang1 = new PersegiPanjang(300, 200, 120, 80, '#0000aa');
+const bujurSangkar1 = new BujurSangkar(400, 400, 100, '#00aa00');
+
+// jalankan perintah main loop setiap 20ms
+setInterval('mainLoop()', 30);
+
+function mainLoop(){
+	//bersihkan canvas
+	ctx.clearRect(0, 0, 800, 600);
+	
+	//gambarkan object
+	lingkaran1.gambar();
+	persegiPanjang1.gambar();
+	bujurSangkar1.gambar();
+	
+	//gerakkan object
+	lingkaran1.gerak();
+	persegiPanjang1.gerak();
+	bujurSangkar1.gerak();
+}
+
+</script>
+</body>
+</html>
